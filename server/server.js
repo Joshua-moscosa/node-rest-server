@@ -1,9 +1,13 @@
-require('./config/config');
+require('./config/config'); ///////// Configurar environment de produccion y desarrollo
+const rutas = require('./routes/usuario'); //////////////// Rutas express
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const app = express();
+
+//######### Las siguientes importaciones son para que se pueda tomar como json el cuerpo de una peticion #############################
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -11,43 +15,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.json('Hello World');
-});
+//##########################################################################################################################
 
-app.get('/usuario', (req, res) => {
-    res.json('usuarios works')
-});
+// Require de las rutas
 
-app.post('/usuario', (req, res) => {
+app.use(rutas); /// Use this instead of this -->
 
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
-    } else {
-        res.json({
-            persona: body
-        });
-    }
-
-
-});
-
-app.put('/usuario/:id', (req, res) => {
-
-    let id = req.params.id;
+/* app.get('/usuario', (req, res) => {
     res.json({
-        id,
-
+        hola: 'mundo'
     });
-});
+}); */
 
-app.delete('/usuario', (req, res) => {
-    res.json('delete usuarios works')
+// Conexión base de datos
+
+mongoose.connect(process.env.URLDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+}, (err, res) => {
+
+    if (err) throw err;
+
+    console.log('Base de datos ONLINE');
 });
 
 app.listen(process.env.PORT, () => {
