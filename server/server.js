@@ -1,5 +1,5 @@
 require('./config/config'); ///////// Configurar environment de produccion y desarrollo
-const rutas = require('./routes/usuario'); //////////////// Rutas express
+//const rutas = require('./routes/usuario'); //////////////// Rutas express
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -19,7 +19,9 @@ app.use(bodyParser.json());
 
 // Require de las rutas
 
-app.use(rutas); /// Use this instead of this -->
+app.use(require('./routes/index'));
+
+///app.use(rutas);  Use this instead of this -->
 
 /* app.get('/usuario', (req, res) => {
     res.json({
